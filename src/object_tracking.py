@@ -99,11 +99,12 @@ lk_params = dict( winSize  = (15,15), maxLevel = 2,
                   criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
 # initialize reference image
-objImg = cv2.imread('../tracking_imgs/ida_temp.jpg',0)
+objImg = cv2.imread('../tracking_imgs/ids_temp2.jpg',0)
 
 # create detetctor and matcher objects
 detector_option = 'SIFT'
 surf = cv2.xfeatures2d.SURF_create(500)
+sift = cv2.xfeatures2d.SIFT_create()
 orb = cv2.ORB_create()
 
 # macthers
@@ -115,8 +116,8 @@ bf = cv2.BFMatcher()
 orb_matcher = cv2.BFMatcher(cv2.NORM_HAMMING)#, crossCheck=True)
 
 # set
-detector = orb
-matcher = orb_matcher
+detector = sift
+matcher = flann
 
 # calculate keypoints and descriptors for reference image
 kpo, deso = detector.detectAndCompute(objImg,None)
@@ -189,7 +190,7 @@ while True:
         #cv2.drawMatches(objImg,kpo,frame,kpf,good_matches, img_matches, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
         # if enough good matches, perform homography
-        if len(good_matches) > 30:
+        if len(good_matches) > 100:
 
             # convert keypoints to 2D list for calcOpticalFlowPyrLK
             #pts = np.float([good_matches[idx].pt for idx in len(good_matches)]).reshape(-1, 2)
@@ -197,6 +198,12 @@ while True:
 
             # calculate homography
             H, _ = calc_homography(kpo,kpf,good_matches)
+            if H is None:
+                continue
+
+            # break if could not find valid homography
+            #if H == 0:
+            #    break
 
             # perform perspective transform and draw bounding box
             corner_camera_coord, center_camera_coord, corner_pts_3d, center_pts = output_perspective_transform(objImg, H)
