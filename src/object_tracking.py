@@ -99,7 +99,7 @@ lk_params = dict( winSize  = (15,15), maxLevel = 2,
                   criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
 # initialize reference image
-objImg = cv2.imread('../tracking_imgs/ids_temp2.jpg',0)
+objImg = cv2.imread('../tracking_imgs/ida_temp2.jpg',0)
 
 # create detetctor and matcher objects
 detector_option = 'SIFT'
