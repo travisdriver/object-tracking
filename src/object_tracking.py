@@ -99,7 +99,7 @@ lk_params = dict( winSize  = (15,15), maxLevel = 2,
                   criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
 # initialize reference image
-objImg = cv2.imread('../tracking_imgs/ida_temp2.jpg',0)
+objImg = cv2.imread('../tracking_imgs/ida_temp.jpg',0)
 
 # create detetctor and matcher objects
 detector_option = 'SIFT'
@@ -189,7 +189,7 @@ while True:
         #img_matches = np.empty((max(objImg.shape[0], frame.shape[0]), objImg.shape[1]+frame.shape[1], 3), dtype=np.uint8)
         #cv2.drawMatches(objImg,kpo,frame,kpf,good_matches, img_matches, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
-        # if enough good matches, perform homography
+        # if enough good matches, apply perspective transform
         if len(good_matches) > 100:
 
             # convert keypoints to 2D list for calcOpticalFlowPyrLK
